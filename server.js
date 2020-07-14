@@ -1,39 +1,22 @@
 const express = require('express');
 const app = express();
-const swaggerJSDoc = require('swagger-jsdoc');
+
 const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./routes/swagger2.json');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
 const port = process.env.PORT || 3000;
-const swaggerOptions = {
-	swaggerDefinition : {
-		info: {
-			title: 'Customer API',
-			description: 'Customer API Information',
-			contact: {
-				name: 'xyz'
-			},
-			servers: ['http://localhost:3000']
-		}
-	},
-	apis: ['app.js']
-};
-
-const swaggerDocs = swaggerJSDoc(swaggerOptions);
-app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-/**
-* @swagger
-* /customers:
-*	get:
-*		description: use to request customers
-*		responses:
-*			'200':
-*				description: A successful response
-*/
 
 app.get('/customers', (req,res) => {
-	console.log('request')
-	res.status(200).send('Customer results');
+	console.log('request');
+	let customerList = [
+		{id:1 ,name: "James Rhodes"},
+		{id:2, name: "Kevin Morris"},
+		{id:3, name: "Steve Walden"}
+	]
+	res.status(200).send(customerList);
 })
 
 app.listen(port, () => {
